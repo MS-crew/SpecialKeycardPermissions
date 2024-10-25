@@ -35,14 +35,14 @@ debug: false
 # This list shows which card will change your permissions.
 special_permission:
   KeycardJanitor:
-  - Checkpoints
-  - ExitGates
+  - ContainmentLevelOne
+  - ArmoryLevelTwo
   - Intercom
 # In this list you can add a special door that can only be opened with the cards you specify.
 special_door_list:
   LczWc:
   - KeycardJanitor
   - KeycardGuard
-  CheckpointLczA:
-  - KeycardJanitor
+  GateA:
+  - KeycardChaosInsurgency
 ```
