@@ -11,7 +11,7 @@ namespace SpecialKeycardPermissions
         public EventHandlers(Plugin plugin) => this.plugin = plugin;
         public void KeycardCheck(InteractingDoorEventArgs ev)
         {
-            if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode||(Plugin.Instance.Config.SpecialPermission.ContainsKey(ev.Player.CurrentItem.Type) && Plugin.Instance.Config.SpecialDoorList.ContainsKey(ev.Door.Type)))
+            if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode)
                 return;
 
             if (Plugin.Instance.Config.SpecialDoorList.TryGetValue(ev.Door.Type, out var keycard))
