@@ -11,36 +11,24 @@ namespace SpecialKeycardPermissions
         public EventHandlers(Plugin plugin) => this.plugin = plugin;
         public void KeycardCheck(InteractingDoorEventArgs ev)
         {
-            if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode)
+            if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode||(Plugin.Instance.Config.SpecialPermission.ContainsKey(ev.Player.CurrentItem.Type) && Plugin.Instance.Config.SpecialDoorList.ContainsKey(ev.Door.Type)))
                 return;
 
             if (Plugin.Instance.Config.SpecialDoorList.TryGetValue(ev.Door.Type, out var keycard))
             {
-                if (ev.Player.CurrentItem?.IsKeycard != true || !keycard.Contains(ev.Player.CurrentItem.Type))
-                {
-                    Log.Debug("Özel kapıyı açmak için uygun kart yok.");
-                    ev.IsAllowed = false;
-                }
-                else
-                {
-                    Log.Debug("Özel kapı bu kartla açılabilir.");
-                    ev.IsAllowed = true;
-                }
+                bool hasValidKeycard = ev.Player.CurrentItem?.IsKeycard == true && keycard.Contains(ev.Player.CurrentItem.Type);
+                Log.Debug(hasValidKeycard ? "Özel kapı bu kartla açılabilir." : "Özel kapıyı açmak için uygun kart yok.");
+                ev.IsAllowed = hasValidKeycard;
                 return;
             }
 
-            if (ev.Door.KeycardPermissions.HasFlag(KeycardPermissions.None) ||
-                ev.Player.CurrentItem?.IsKeycard != true)
+            if (ev.Door.KeycardPermissions.HasFlag(KeycardPermissions.None) || ev.Player.CurrentItem?.IsKeycard != true)
                 return;
 
             if (Plugin.Instance.Config.SpecialPermission.TryGetValue(ev.Player.CurrentItem.Type, out var permissions))
             {
                 ev.IsAllowed = permissions.Any(permission => ev.Door.KeycardPermissions.HasFlag(permission));
-
-                if (ev.IsAllowed)
-                    Log.Debug("Bu kart özel izin ile kapıyı açtı.");
-                else
-                    Log.Debug("Kartın özel izni kapıyı açmaya yetmedi.");
+                Log.Debug(ev.IsAllowed ? "Bu kart özel izin ile kapıyı açtı." : "Kartın özel izni kapıyı açmaya yetmedi.");
             }
         }
         public void KeycardCheckLocker(InteractingLockerEventArgs ev)
