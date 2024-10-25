@@ -18,12 +18,12 @@ namespace SpecialKeycardPermissions
             {
                 if (ev.Player.CurrentItem?.IsKeycard != true || !keycard.Contains(ev.Player.CurrentItem.Type))
                 {
-                    Log.Warn("Özel kapıyı açmak için uygun kart yok.");
+                    Log.Debug("Özel kapıyı açmak için uygun kart yok.");
                     ev.IsAllowed = false;
                 }
                 else
                 {
-                    Log.Warn("Özel kapı bu kartla açılabilir.");
+                    Log.Debug("Özel kapı bu kartla açılabilir.");
                     ev.IsAllowed = true;
                 }
                 return;
@@ -38,9 +38,9 @@ namespace SpecialKeycardPermissions
                 ev.IsAllowed = permissions.Any(permission => ev.Door.KeycardPermissions.HasFlag(permission));
 
                 if (ev.IsAllowed)
-                    Log.Warn("Bu kart özel izin ile kapıyı açtı.");
+                    Log.Debug("Bu kart özel izin ile kapıyı açtı.");
                 else
-                    Log.Warn("Kartın özel izni kapıyı açmaya yetmedi.");
+                    Log.Debug("Kartın özel izni kapıyı açmaya yetmedi.");
             }
         }
         public void KeycardCheckLocker(InteractingLockerEventArgs ev)
@@ -54,7 +54,7 @@ namespace SpecialKeycardPermissions
             {
                 ev.IsAllowed = keycardPermissions.Any(permission => ev.InteractingChamber.RequiredPermissions.HasFlag(permission));
 
-                Log.Warn(ev.IsAllowed
+                Log.Debug(ev.IsAllowed
                     ? "Bu kart özel izinle locker'ı açtı."
                     : $"Kartın özel izni locker'ı açmaya yetmedi - Chamber: {ev.InteractingChamber}, Locker: {ev.InteractingLocker.Type}, İzinler: {ev.InteractingChamber.RequiredPermissions}");
             }
@@ -63,24 +63,24 @@ namespace SpecialKeycardPermissions
         {
             if (ev.Player == null)
             {
-                Log.Warn("Oyuncu null");
+                Log.Debug("Oyuncu null");
                 return;
             }
 
             if (ev.Player.ReferenceHub.serverRoles.BypassMode || ev.Player.IsScp)
             {
-                Log.Warn("Oyuncu bypass modunda veya SCP");
+                Log.Debug("Oyuncu bypass modunda veya SCP");
                 return;
             }
 
             if (ev.Player.CurrentItem?.IsKeycard == true &&
                 Plugin.Instance.Config.SpecialPermission.TryGetValue(ev.Player.CurrentItem.Type, out var keycardPermissions))
             {
-                Log.Warn("Kart özel izinlere sahip ve jeneratör izni gerektiriyor.");
+                Log.Debug("Kart özel izinlere sahip ve jeneratör izni gerektiriyor.");
 
                 ev.IsAllowed = keycardPermissions.Any(permission => ev.Generator.KeycardPermissions.HasFlag(permission));
 
-                Log.Warn(ev.IsAllowed
+                Log.Debug(ev.IsAllowed
                     ? "Kartın özel izni jeneratörü açtı."
                     : "Kartın özel izni jeneratörü açmaya yetmedi.");
             }
