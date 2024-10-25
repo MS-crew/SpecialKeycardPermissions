@@ -16,9 +16,10 @@ namespace SpecialKeycardPermissions
             {
             ItemType.KeycardJanitor,
             new KeycardPermissions[]
-            { KeycardPermissions.ContainmentLevelOne,
+            {
+              KeycardPermissions.ContainmentLevelOne,
+              KeycardPermissions.ArmoryLevelTwo,
               KeycardPermissions.Intercom,
-              KeycardPermissions.ArmoryLevelThree
             }
             },
         };
@@ -35,10 +36,10 @@ namespace SpecialKeycardPermissions
             }
             },
             {
-            DoorType.CheckpointLczA,
+            DoorType.GateA,
             new ItemType[]
             { 
-                ItemType.KeycardJanitor
+                ItemType.KeycardChaosInsurgency
             }
             },
         };
