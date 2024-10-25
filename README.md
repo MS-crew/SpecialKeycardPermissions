@@ -32,5 +32,17 @@ Thank you for using our plugin and helping us improve it!
 ```yml
 Is_enabled: true
 debug: false
-chance: 50
+# This list shows which card will change your permissions.
+special_permission:
+  KeycardJanitor:
+  - Checkpoints
+  - ExitGates
+  - Intercom
+# In this list you can add a special door that can only be opened with the cards you specify.
+special_door_list:
+  LczWc:
+  - KeycardJanitor
+  - KeycardGuard
+  CheckpointLczA:
+  - KeycardJanitor
 ```
