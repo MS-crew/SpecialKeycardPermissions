@@ -11,7 +11,7 @@ namespace SpecialKeycardPermissions
         public override string Name => "SpecialKeycardPermission";
         public override string Prefix => "SpecialKeycardPermission";
         public override Version RequiredExiledVersion { get; } = new Version(8, 13, 1);
-        public override Version Version { get; } = new Version(1, 0, 1);
+        public override Version Version { get; } = new Version(1, 0, 2);
 
         private EventHandlers eventHandler;
         public override void OnEnabled()

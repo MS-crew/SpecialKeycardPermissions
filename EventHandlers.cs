@@ -13,7 +13,6 @@ namespace SpecialKeycardPermissions
         {
             if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode)
                 return;
-
             if (Plugin.Instance.Config.SpecialDoorList.TryGetValue(ev.Door.Type, out var keycard))
             {
                 bool hasValidKeycard = ev.Player.CurrentItem?.IsKeycard == true && keycard.Contains(ev.Player.CurrentItem.Type);
@@ -21,10 +20,8 @@ namespace SpecialKeycardPermissions
                 ev.IsAllowed = hasValidKeycard;
                 return;
             }
-
-            if (ev.Door.KeycardPermissions.HasFlag(KeycardPermissions.None) || ev.Player.CurrentItem?.IsKeycard != true)
+            if (!ev.Door.IsKeycardDoor || ev.Player.CurrentItem?.IsKeycard != true)
                 return;
-
             if (Plugin.Instance.Config.SpecialPermission.TryGetValue(ev.Player.CurrentItem.Type, out var permissions))
             {
                 ev.IsAllowed = permissions.Any(permission => ev.Door.KeycardPermissions.HasFlag(permission));
