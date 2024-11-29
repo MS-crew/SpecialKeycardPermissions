@@ -1,5 +1,5 @@
-﻿using Exiled.API.Features;
-using System;
+﻿using System;
+using Exiled.API.Features;
 using P = Exiled.Events.Handlers.Player;
 
 namespace SpecialKeycardPermissions
@@ -10,17 +10,19 @@ namespace SpecialKeycardPermissions
         public override string Author => "ZurnaSever";
         public override string Name => "SpecialKeycardPermission";
         public override string Prefix => "SpecialKeycardPermission";
-        public override Version RequiredExiledVersion { get; } = new Version(8, 13, 1);
-        public override Version Version { get; } = new Version(1, 0, 2);
+        public override Version RequiredExiledVersion { get; } = new Version(9, 0, 0);
+        public override Version Version { get; } = new Version(1, 0, 3);
 
         private EventHandlers eventHandler;
         public override void OnEnabled()
         {
             Instance = this;
             eventHandler = new EventHandlers(this);
+
             P.InteractingDoor += eventHandler.KeycardCheck;
             P.InteractingLocker += eventHandler.KeycardCheckLocker;
             P.UnlockingGenerator += eventHandler.KeycardCheckGenerator;
+            
             base.OnEnabled();
         }
         public override void OnDisabled()
@@ -28,8 +30,10 @@ namespace SpecialKeycardPermissions
             P.InteractingDoor -= eventHandler.KeycardCheck;
             P.InteractingLocker -= eventHandler.KeycardCheckLocker;
             P.UnlockingGenerator -= eventHandler.KeycardCheckGenerator;
+
             eventHandler = null;
             Instance = null;
+            
             base.OnDisabled();
         }
     }

@@ -30,7 +30,7 @@ namespace SpecialKeycardPermissions
             {
             DoorType.LczWc,
             new ItemType[]
-            { 
+            {
                 ItemType.KeycardJanitor,
                 ItemType.KeycardGuard
             }
@@ -38,7 +38,7 @@ namespace SpecialKeycardPermissions
             {
             DoorType.GateA,
             new ItemType[]
-            { 
+            {
                 ItemType.KeycardChaosInsurgency
             }
             },
@@ -63,6 +63,7 @@ namespace SpecialKeycardPermissions
 
         public KeycardPermissions[] KeycardPermissionsExp { get; set; } =
         {
+        KeycardPermissions.None,                 // 0: No permissions
         KeycardPermissions.Checkpoints,          // 1: Opens checkpoints
         KeycardPermissions.ExitGates,            // 2: Opens Gate A and Gate B
         KeycardPermissions.Intercom,             // 4: Opens the Intercom door
@@ -72,12 +73,13 @@ namespace SpecialKeycardPermissions
         KeycardPermissions.ContainmentLevelThree,// 0x40: Opens Containment Level Three areas
         KeycardPermissions.ArmoryLevelOne,       // 0x80: Opens Light Containment armory
         KeycardPermissions.ArmoryLevelTwo,       // 0x100: Opens Heavy Containment armories
-        KeycardPermissions.ArmoryLevelThree,     // 0x200: Opens MicroHID room
-        KeycardPermissions.ScpOverride           // 0x400: Override SCP-specific doors
+        KeycardPermissions.ArmoryLevelThree,     // 0x200: Opens MicroHID room or 3X and Jailbird Locker
+        KeycardPermissions.ScpOverride           // 0x400: Checkpoints access for SCP
         };
 
         public DoorType[] DoorTypeExp { get; set; } =
         {
+        DoorType.UnknownDoor,
         DoorType.Scp914Door,
         DoorType.GR18Inner,
         DoorType.Scp049Gate,
@@ -105,9 +107,10 @@ namespace SpecialKeycardPermissions
         DoorType.GateB,
         DoorType.HczArmory,
         DoorType.HeavyContainmentDoor,
-        DoorType.HID,
-        DoorType.HIDLeft,
-        DoorType.HIDRight,
+        DoorType.HeavyBulkDoor,
+        DoorType.HIDChamber,
+        DoorType.HIDUpper,
+        DoorType.HIDLower,
         DoorType.Intercom,
         DoorType.LczArmory,
         DoorType.LczCafe,
@@ -134,7 +137,8 @@ namespace SpecialKeycardPermissions
         DoorType.CheckpointArmoryA,
         DoorType.CheckpointArmoryB,
         DoorType.Airlock,
-        DoorType.Scp173NewGate
+        DoorType.Scp173NewGate,
+        DoorType.EscapeFinal
         };
     }
 }

@@ -52,10 +52,6 @@
     <Reference Include="0Harmony">
       <HintPath>..\..\..\Downloads\Exiled\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ExMod.Exiled.8.13.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Mirror">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Mirror.dll</HintPath>
     </Reference>
@@ -79,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ExMod.Exiled">
-      <Version>8.13.1</Version>
+      <Version>9.0.0-alpha.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
