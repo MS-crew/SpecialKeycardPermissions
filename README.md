@@ -1,9 +1,9 @@
 <h1 align="center">Special Keycard Permission</h1>
 <div align="center">
 <a href="https://github.com/MS-crew/SpecialKeycardPermissions/releases"><img src="https://img.shields.io/github/downloads/MS-crew/SpecialKeycardPermissions/total?style=for-the-badge&logo=githubactions&label=Downloads" href="https://github.com/MS-crew/SpecialKeycardPermissions/releases" alt="GitHub Release Download"></a>
-<a href="https://github.com/MS-crew/SpecialKeycardPermissions/releases"><img src="https://img.shields.io/badge/Build-1.0.1-brightgreen?style=for-the-badge&logo=gitbook" href="https://github.com/MS-crew/SpecialKeycardPermissions/releases" alt="GitHub Releases"></a>
+<a href="https://github.com/MS-crew/SpecialKeycardPermissions/releases"><img src="https://img.shields.io/badge/Build-2.0.0-brightgreen?style=for-the-badge&logo=gitbook" href="https://github.com/MS-crew/SpecialKeycardPermissions/releases" alt="GitHub Releases"></a>
 <a href="https://github.com/MS-crew/SpecialKeycardPermissions/blob/master/LICENSE"><img src="https://img.shields.io/badge/Licence-GNU_3.0-blue?style=for-the-badge&logo=gitbook" href="https://github.com/MS-crew/SpecialKeycardPermissions/blob/master/LICENSE" alt="General Public License v3.0"></a>
-<a href="https://github.com/ExMod-Team/EXILED"><img src="https://img.shields.io/badge/Exiled-8.13.1-red?style=for-the-badge&logo=gitbook" href="https://github.com/ExMod-Team/EXILED" alt="GitHub Exiled"></a>
+<a href="https://github.com/ExMod-Team/EXILED"><img src="https://img.shields.io/badge/Exiled-9.3.0-red?style=for-the-badge&logo=gitbook" href="https://github.com/ExMod-Team/EXILED" alt="GitHub Exiled"></a>
 
 </div>
 
