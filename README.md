@@ -29,19 +29,34 @@ This is the initial release of the plugin. We welcome any feedback, bug reports,
 Thank you for using our plugin and helping us improve it!
 ## Default Config
 ```yml
-Is_enabled: true
-debug: false
+is_enabled: true
+debug: true
+# Should you have the keycard in hand?
+held_keycard: false
 # This list shows which card will change your permissions.
 special_permission:
-  KeycardJanitor:
-  - ContainmentLevelOne
-  - ArmoryLevelTwo
-  - Intercom
+  KeycardJanitor: Intercom, ContainmentLevelOne, ArmoryLevelTwo
+# This list shows which Doors with id will change your permissions.
+special_door_ids:
+  122: Checkpoints, AlphaWarhead
+  123: Checkpoints, AlphaWarhead
+  124: Checkpoints, AlphaWarhead
+  125: Checkpoints, AlphaWarhead
+# This list shows which Doors with Type will change your permissions.
+special_door_types:
+  Airlock: Intercom, ArmoryLevelOne
 # In this list you can add a special door that can only be opened with the cards you specify.
 special_door_list:
   LczWc:
   - KeycardJanitor
   - KeycardGuard
   GateA:
+  - KeycardChaosInsurgency
+# In this list you can add a special doorid that can only be opened with the cards you specify.
+special_doord_list:
+  2:
+  - KeycardJanitor
+  - KeycardGuard
+  3:
   - KeycardChaosInsurgency
 ```
