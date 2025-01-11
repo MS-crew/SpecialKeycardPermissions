@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Interfaces;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace SpecialKeycardPermissions
 {
@@ -10,37 +10,65 @@ namespace SpecialKeycardPermissions
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
 
+        [Description("Should you have the keycard in hand?")]
+        public bool HeldKeycard { get; set; } = false;
+
         [Description("This list shows which card will change your permissions.")]
-        public Dictionary<ItemType, KeycardPermissions[]> SpecialPermission { get; set; } = new()
+        public Dictionary<ItemType, KeycardPermissions> SpecialPermission { get; set; } = new Dictionary<ItemType, KeycardPermissions>
         {
-            {
-            ItemType.KeycardJanitor,
-            new KeycardPermissions[]
-            {
-              KeycardPermissions.ContainmentLevelOne,
-              KeycardPermissions.ArmoryLevelTwo,
-              KeycardPermissions.Intercom,
-            }
-            },
+            {ItemType.KeycardJanitor, KeycardPermissions.ContainmentLevelOne | KeycardPermissions.ArmoryLevelTwo | KeycardPermissions.Intercom},
         };
 
+        [Description("This list shows which Doors with id will change your permissions.")]
+        public Dictionary<byte, KeycardPermissions> SpecialDoorIds { get; set; } = new Dictionary<byte, KeycardPermissions>
+        {
+            { 122, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
+            { 123, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
+            { 124, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
+            { 125, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
+        }; 
+        [Description("This list shows which Doors with Type will change your permissions.")]
+        public Dictionary<DoorType, KeycardPermissions> SpecialDoorTypes { get; set; } = new Dictionary<DoorType, KeycardPermissions> 
+        {
+            {DoorType.Airlock , KeycardPermissions.ArmoryLevelOne | KeycardPermissions.Intercom},
+        };
+        
         [Description("In this list you can add a special door that can only be opened with the cards you specify.")]
         public Dictionary<DoorType, ItemType[]> SpecialDoorList { get; set; } = new()
         {
             {
             DoorType.LczWc,
             new ItemType[]
-            {
+                {
                 ItemType.KeycardJanitor,
                 ItemType.KeycardGuard
-            }
+                }
             },
             {
             DoorType.GateA,
             new ItemType[]
-            {
+                {
                 ItemType.KeycardChaosInsurgency
-            }
+                }
+            },
+        }; 
+        [Description("In this list you can add a special doorid that can only be opened with the cards you specify.")]
+        public Dictionary<byte, ItemType[]> SpecialDoorıdList { get; set; } = new()
+        {
+            {
+            2,
+            new ItemType[]
+                {
+                ItemType.KeycardJanitor,
+                ItemType.KeycardGuard
+                }
+            },
+            {
+            3,
+            new ItemType[]
+                {
+                ItemType.KeycardChaosInsurgency
+                }
             },
         };
 
@@ -102,7 +130,6 @@ namespace SpecialKeycardPermissions
         DoorType.EntranceDoor,
         DoorType.EscapePrimary,
         DoorType.EscapeSecondary,
-        DoorType.ServersBottom,
         DoorType.GateA,
         DoorType.GateB,
         DoorType.HczArmory,
@@ -122,7 +149,6 @@ namespace SpecialKeycardPermissions
         DoorType.SurfaceGate,
         DoorType.Scp330,
         DoorType.Scp330Chamber,
-        DoorType.CheckpointGate,
         DoorType.SurfaceDoor,
         DoorType.CheckpointEzHczA,
         DoorType.CheckpointEzHczB,
