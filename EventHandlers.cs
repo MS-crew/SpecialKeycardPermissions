@@ -3,10 +3,9 @@ using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
-using Exiled.CustomItems;
-using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using Exiled.CustomItems.API.Features;
 
 namespace SpecialKeycardPermissions
 {
@@ -14,17 +13,6 @@ namespace SpecialKeycardPermissions
     {
         private readonly Plugin plugin;
         public EventHandlers(Plugin plugin) => this.plugin = plugin;
-        public void Start()
-        {
-            foreach (Item keycard in Item.List)
-            {
-                if (Plugin.Instance.Config.SpecialPermission.TryGetValue(keycard.Type, out var permissions))
-                {
-                    if (keycard.Is<Keycard>(out Keycard keycard1))
-                        keycard1.Permissions = permissions;
-                }
-            }
-        }
         public void KeycardItemCheck(ItemAddedEventArgs ev)
         {
             if (CustomItem.TryGet(ev.Item.Serial, out _))
@@ -55,9 +43,10 @@ namespace SpecialKeycardPermissions
         {
             if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode)
                 return;
-            Log.Debug($"Door id: {ev.Door.Base.DoorId}");
 
-            if (Plugin.Instance.Config.SpecialDoorıdList.TryGetValue(ev.Door.Base.DoorId, out var doorIdKeycards))
+            Log.Debug($"Door id: {ev.Door.Base.DoorId}, Doortype {ev.Door.Type}");
+
+            if (Plugin.Instance.Config.SpecialDoorIdList.TryGetValue(ev.Door.Base.DoorId, out var doorIdKeycards))
             {
                 bool hasValidKeycard;
                 if (!plugin.Config.HeldKeycard)

@@ -31,6 +31,7 @@ namespace SpecialKeycardPermissions
         public Dictionary<DoorType, KeycardPermissions> SpecialDoorTypes { get; set; } = new Dictionary<DoorType, KeycardPermissions> 
         {
             {DoorType.Airlock , KeycardPermissions.ArmoryLevelOne | KeycardPermissions.Intercom},
+            {DoorType.EscapeFinal , KeycardPermissions.ArmoryLevelOne | KeycardPermissions.Intercom},
         };
         
         [Description("In this list you can add a special door that can only be opened with the cards you specify.")]
@@ -53,7 +54,7 @@ namespace SpecialKeycardPermissions
             },
         }; 
         [Description("In this list you can add a special doorid that can only be opened with the cards you specify.")]
-        public Dictionary<byte, ItemType[]> SpecialDoorıdList { get; set; } = new()
+        public Dictionary<byte, ItemType[]> SpecialDoorIdList { get; set; } = new()
         {
             {
             2,
