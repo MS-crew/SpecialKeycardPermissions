@@ -12,65 +12,80 @@ namespace SpecialKeycardPermissions
     public class EventHandlers
     {
         private readonly Plugin plugin;
-        public EventHandlers(Plugin plugin) => this.plugin = plugin;
-        public void KeycardItemCheck(ItemAddedEventArgs ev)
-        {
-            if (CustomItem.TryGet(ev.Item.Serial, out _))
-                return;
 
-            if (Plugin.Instance.Config.SpecialPermission.TryGetValue(ev.Item.Type, out var permissions))
-                if (ev.Item.Is<Keycard>(out Keycard keycard))
-                    keycard.Permissions = permissions;
-        }
+        public EventHandlers(Plugin plugin) => this.plugin = plugin;
+
         public void DoorCheck()
         {
             foreach (Door door in Door.List)
             {
-                if (plugin.Config.SpecialDoorIds.ContainsKey(door.Base.DoorId))
-                    door.KeycardPermissions = plugin.Config.SpecialDoorIds[door.Base.DoorId];
+                if (plugin.Config.SpecialDoorIds.TryGetValue(door.Base.DoorId, out var idPerms))
+                    door.KeycardPermissions = idPerms;
 
-                else if (plugin.Config.SpecialDoorTypes.ContainsKey(door.Type))
-                    door.KeycardPermissions = plugin.Config.SpecialDoorTypes[door.Type];
+                else if (plugin.Config.SpecialDoorTypes.TryGetValue(door.Type, out var typePerms))
+                    door.KeycardPermissions = typePerms;
             }
         }
+
         public void PickupCheck(PickupAddedEventArgs ev)
         {
-            if (Plugin.Instance.Config.SpecialPermission.TryGetValue(ev.Pickup.Type, out var permissions))
-                if (ev.Pickup.Is<KeycardPickup>(out KeycardPickup keycard))
-                    keycard.Permissions = permissions;
+            if (plugin.Config.SpecialPermission.IsEmpty())
+                return;
+
+            if (!plugin.Config.SpecialPermission.TryGetValue(ev.Pickup.Type, out var permissions))
+                return;
+
+            if (ev.Pickup.Is<KeycardPickup>(out KeycardPickup keycard))
+                keycard.Permissions = permissions;
         }
+
+        public void KeycardItemCheck(ItemAddedEventArgs ev)
+        {
+            if (plugin.Config.SpecialPermission.IsEmpty())
+                return;
+
+            if (CustomItem.TryGet(ev.Item.Serial, out _))
+                return;
+
+            if (!plugin.Config.SpecialPermission.TryGetValue(ev.Item.Type, out var permissions))
+                return;
+
+            if (ev.Item.Is<Keycard>(out Keycard keycard))
+                keycard.Permissions = permissions;
+        }
+        
         public void KeycardCheck(InteractingDoorEventArgs ev)
         {
             if (ev.Player == null || ev.Door.IsLocked || ev.Player.ReferenceHub.serverRoles.BypassMode)
                 return;
 
-            Log.Debug($"Door id: {ev.Door.Base.DoorId}, Doortype {ev.Door.Type}");
+            Log.Debug($"Door id: {ev.Door.Base.DoorId}, Doortype: {ev.Door.Type}");
 
-            if (Plugin.Instance.Config.SpecialDoorIdList.TryGetValue(ev.Door.Base.DoorId, out var doorIdKeycards))
+            ItemType[] validKeycards = null;
+
+            if (plugin.Config.SpecialDoorIdList.TryGetValue(ev.Door.Base.DoorId, out ItemType[] idKeycards))
             {
-                bool hasValidKeycard;
-                if (!plugin.Config.HeldKeycard)
-                    hasValidKeycard = ev.Player.Items.Any(item => item.IsKeycard && doorIdKeycards.Contains(item.Type));
-                else
-                    hasValidKeycard = ev.Player.CurrentItem?.IsKeycard == true && doorIdKeycards.Contains(ev.Player.CurrentItem.Type);
-
-                Log.Debug(hasValidKeycard ? "Özel idli kapı bu kartla açılabilir." : "Özel idli kapıyı açmak için uygun kart yok.");
-                ev.IsAllowed = hasValidKeycard;
-                return;
+                validKeycards = idKeycards;
+                Log.Debug("Kapı idsi özel listede.");
+            }
+            else if (plugin.Config.SpecialDoorList.TryGetValue(ev.Door.Type, out ItemType[] typeKeycards))
+            {
+                validKeycards = typeKeycards;
+                Log.Debug("Kapı tipi özel listede.");
             }
 
-            else if (Plugin.Instance.Config.SpecialDoorList.TryGetValue(ev.Door.Type, out var doorTypeKeycards))
-            {
-                bool hasValidKeycard;
-                if (!plugin.Config.HeldKeycard)
-                    hasValidKeycard = ev.Player.Items.Any(item => item.IsKeycard && doorTypeKeycards.Contains(item.Type));
-                else
-                    hasValidKeycard = ev.Player.CurrentItem?.IsKeycard == true && doorTypeKeycards.Contains(ev.Player.CurrentItem.Type);
-
-                Log.Debug(hasValidKeycard ? "Özel typleli kapı bu kartla açılabilir." : "Özel typleli kapıyı açmak için uygun kart yok.");
-                ev.IsAllowed = hasValidKeycard;
+            if (validKeycards == null)
                 return;
-            }
+
+            bool hasValidKeycard = plugin.Config.HeldKeycard
+                ? ev.Player.CurrentItem?.IsKeycard == true && validKeycards.Contains(ev.Player.CurrentItem.Type)
+                : ev.Player.Items.Any(item => item.IsKeycard && validKeycards.Contains(item.Type));
+
+            Log.Debug(hasValidKeycard
+                ? "Bu özel kapı bu kartla açılabilir."
+                : "Bu özel kapıyı açmak için uygun kart yok.");
+
+            ev.IsAllowed = hasValidKeycard;
         }
     }
 }
