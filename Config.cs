@@ -1,9 +1,9 @@
-﻿using Exiled.API.Enums;
+﻿using System;
+using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Interfaces;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System;
-using System.Linq;
 
 namespace SpecialKeycardPermissions
 {
@@ -15,7 +15,7 @@ namespace SpecialKeycardPermissions
         [Description("Should you have the keycard in hand?")]
         public bool HeldKeycard { get; set; } = false;
 
-        [Description("This list shows which card will change your permissions.")]
+        [Description("(FOR NOW ITS DISABLED)This list shows which card will change your permissions.")]
         public Dictionary<ItemType, KeycardPermissions> SpecialPermission { get; set; } = new Dictionary<ItemType, KeycardPermissions>
         {
             {ItemType.KeycardJanitor, KeycardPermissions.ContainmentLevelOne | KeycardPermissions.ArmoryLevelTwo | KeycardPermissions.Intercom},
@@ -29,6 +29,7 @@ namespace SpecialKeycardPermissions
             { 124, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
             { 125, KeycardPermissions.Checkpoints | KeycardPermissions.AlphaWarhead },
         }; 
+
         [Description("This list shows which Doors with Type will change your permissions.")]
         public Dictionary<DoorType, KeycardPermissions> SpecialDoorTypes { get; set; } = new Dictionary<DoorType, KeycardPermissions> 
         {
@@ -55,29 +56,30 @@ namespace SpecialKeycardPermissions
                 }
             },
         }; 
+
         [Description("In this list you can add a special doorid that can only be opened with the cards you specify.")]
-        public Dictionary<byte, ItemType[]> SpecialDoorIdList { get; set; } = new()
+        public Dictionary<byte, ItemType[]> SpecialDoorIdList { get; set; } = new Dictionary<byte, ItemType[]>
         {
             {
             2,
-            new ItemType[]
+                new ItemType[]
                 {
-                ItemType.KeycardJanitor,
-                ItemType.KeycardGuard
+                    ItemType.KeycardJanitor,
+                    ItemType.KeycardGuard
                 }
             },
-            {
+            {   
             3,
-            new ItemType[]
+                new ItemType[]
                 {
-                ItemType.KeycardChaosInsurgency
+                    ItemType.KeycardChaosInsurgency
                 }
-            },
+            }
         };
 
-        [Description("Example Types you can add")]
+        /*[Description("Example Types you can add")]
         public ItemType[] KeycardTypes { get; set; } =
-        {
+        [
         ItemType.KeycardJanitor,
         ItemType.KeycardScientist,
         ItemType.KeycardResearchCoordinator,
@@ -90,7 +92,7 @@ namespace SpecialKeycardPermissions
         ItemType.KeycardFacilityManager,
         ItemType.KeycardChaosInsurgency,
         ItemType.KeycardO5
-        };
+        ];*/
 
         public KeycardPermissions[] KeycardPermissionsExp { get; set; } = [.. Enum.GetValues(typeof(KeycardPermissions)).Cast<KeycardPermissions>()];
 
