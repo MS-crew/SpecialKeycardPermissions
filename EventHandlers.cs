@@ -4,41 +4,52 @@ using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Item;
 using Exiled.Events.EventArgs.Player;
+using Exiled.API.Enums;
+using Exiled.API.Features.Items;
+
+using KeycardPickup = Exiled.API.Features.Pickups.KeycardPickup;
 using Exiled.CustomItems.API.Features;
 
 namespace SpecialKeycardPermissions
 {
     public class EventHandlers
     {
-        private readonly Plugin plugin;
+        private readonly Config config;
 
-        public EventHandlers(Plugin plugin) => this.plugin = plugin;
+        public EventHandlers(Config config) => this.config = config;
 
         public void DoorCheck()
         {
             foreach (Door door in Door.List)
             {
-                if (plugin.Config.SpecialDoorIds.TryGetValue(door.Base.DoorId, out var idPerms))
+                if (config.SpecialDoorIds.TryGetValue(door.Base.DoorId, out KeycardPermissions idPerms))
+                {
                     door.KeycardPermissions = idPerms;
-
-                else if (plugin.Config.SpecialDoorTypes.TryGetValue(door.Type, out var typePerms))
+                    Log.Debug($"Door id: {door.Base.DoorId}, Permissions: {door.KeycardPermissions}");
+                    return;
+                }
+                    
+                if (config.SpecialDoorTypes.TryGetValue(door.Type, out KeycardPermissions typePerms))
+                {
                     door.KeycardPermissions = typePerms;
+                    Log.Debug($"Door type: {door.Type}, Permissions: {typePerms}");
+                    return;
+                }
             }
         }
-
-        /*public void PickupCheck(PickupAddedEventArgs ev)
+        
+        public void PickupCheck(PickupAddedEventArgs ev)
         {
             if (ev.Pickup.Category != ItemCategory.Keycard)
                 return;
 
-            if (plugin.Config.SpecialPermission.IsEmpty())
+            if (!config.SpecialPermission.TryGetValue(ev.Pickup.Type, out KeycardPermissions permissions))
                 return;
 
-            if (!plugin.Config.SpecialPermission.TryGetValue(ev.Pickup.Type, out var permissions))
+            if (ev.Pickup is not KeycardPickup keycardpickup)
                 return;
 
-            if (ev.Pickup.Is<KeycardPickup>(out KeycardPickup keycard))
-               keycard.Permissions = permissions;
+            keycardpickup.Permissions = permissions;
         }
 
         public void KeycardItemCheck(ItemAddedEventArgs ev)
@@ -46,19 +57,18 @@ namespace SpecialKeycardPermissions
             if (ev.Item.Category != ItemCategory.Keycard)
                 return;
 
-            if (plugin.Config.SpecialPermission.IsEmpty())
-                return;
-
             if (CustomItem.TryGet(ev.Item.Serial, out _))
                 return;
 
-            if (!plugin.Config.SpecialPermission.TryGetValue(ev.Item.Type, out var permissions))
+            if (!config.SpecialPermission.TryGetValue(ev.Item.Type, out KeycardPermissions permissions))
                 return;
 
-            if (ev.Item.Is<Keycard>(out Keycard keycard))
-                keycard.Permissions = permissions;
-        }*/
+            if (ev.Item is not Keycard keycard)
+                return;
 
+            keycard.Permissions = permissions;
+        }
+        
         public void KeycardCheck(InteractingDoorEventArgs ev)
         {
             if (ev.Player == null || ev.Door.IsLocked || ev.Player.IsBypassModeEnabled)
@@ -70,7 +80,7 @@ namespace SpecialKeycardPermissions
             if (validKeycards == null)
                 return;
 
-            bool hasValidKeycard = plugin.Config.HeldKeycard
+            bool hasValidKeycard = config.HeldKeycard
                 ? ev.Player.CurrentItem?.IsKeycard == true && validKeycards.Contains(ev.Player.CurrentItem.Type)
                 : ev.Player.Items.Any(item => item.IsKeycard && validKeycards.Contains(item.Type));
 
@@ -103,13 +113,13 @@ namespace SpecialKeycardPermissions
 
         private ItemType[] GetValidKeycards(Door door)
         {
-            if (plugin.Config.SpecialDoorIdList.TryGetValue(door.Base.DoorId, out ItemType[] idKeycards))
+            if (config.SpecialDoorIdList.TryGetValue(door.Base.DoorId, out ItemType[] idKeycards))
             {
                 Log.Debug($"The door id {door.Base.DoorId} is in the Special Door Id List");
                 return idKeycards;
             }
 
-            else if (plugin.Config.SpecialDoorList.TryGetValue(door.Type, out ItemType[] typeKeycards))
+            else if (config.SpecialDoorList.TryGetValue(door.Type, out ItemType[] typeKeycards))
             {
                 Log.Debug($"The door type {door.Type} is in the Special Door List");
                 return typeKeycards;

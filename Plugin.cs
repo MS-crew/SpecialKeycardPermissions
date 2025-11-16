@@ -1,6 +1,7 @@
 ﻿using System;
 using Exiled.API.Features;
 using Map = Exiled.Events.Handlers.Map;
+using Server = Exiled.Events.Handlers.Server;
 using Item = Exiled.Events.Handlers.Item;
 using Player = Exiled.Events.Handlers.Player;
 
@@ -16,17 +17,17 @@ namespace SpecialKeycardPermissions
 
         public override string Prefix => "SpecialKeycardPermission";
 
-        public override Version Version { get; } = new Version(2, 1, 1);
+        public override Version Version { get; } = new Version(2, 2, 1);
 
-        public override Version RequiredExiledVersion { get; } = new Version(9, 3, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(9, 10, 0);
 
         public override void OnEnabled()
         {
-            eventHandler = new EventHandlers(this);
+            eventHandler = new EventHandlers(this.Config);
 
-            Map.Generated += eventHandler.DoorCheck; 
-            //Map.PickupAdded += eventHandler.PickupCheck; 
-            //Player.ItemAdded += eventHandler.KeycardItemCheck;
+            Map.PickupAdded += eventHandler.PickupCheck;
+            Server.RoundStarted += eventHandler.DoorCheck;
+            Player.ItemAdded += eventHandler.KeycardItemCheck;
             Player.InteractingDoor += eventHandler.KeycardCheck;
             Item.KeycardInteracting += eventHandler.ThrowKeycardCheck;
 
@@ -34,9 +35,9 @@ namespace SpecialKeycardPermissions
         }
         public override void OnDisabled()
         {
-            Map.Generated -= eventHandler.DoorCheck;
-            //Map.PickupAdded -= eventHandler.PickupCheck;
-            //Player.ItemAdded -= eventHandler.KeycardItemCheck;
+            Map.PickupAdded -= eventHandler.PickupCheck;
+            Server.RoundStarted -= eventHandler.DoorCheck;
+            Player.ItemAdded -= eventHandler.KeycardItemCheck;
             Player.InteractingDoor -= eventHandler.KeycardCheck;
             Item.KeycardInteracting -= eventHandler.ThrowKeycardCheck;
 
