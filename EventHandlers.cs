@@ -26,14 +26,13 @@ namespace SpecialKeycardPermissions
                 {
                     door.KeycardPermissions = idPerms;
                     Log.Debug($"Door id: {door.Base.DoorId}, Permissions: {door.KeycardPermissions}");
-                    return;
+                    continue;
                 }
                     
                 if (config.SpecialDoorTypes.TryGetValue(door.Type, out KeycardPermissions typePerms))
                 {
                     door.KeycardPermissions = typePerms;
                     Log.Debug($"Door type: {door.Type}, Permissions: {typePerms}");
-                    return;
                 }
             }
         }
